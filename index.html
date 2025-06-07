@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Impulse Tracker on v86 + FreeDOS</title>
+  <style>
+    body { margin:0; background:#000; }
+    #screen { width: 100vw; height: 100vh; display: block; }
+  </style>
+  <!-- GitHub Pages 上の相対パスを指定 -->
+  <script src="./v86.js"></script>
+</head>
+<body>
+  <div id="screen"></div>
+  <script>
+    // v86 を初期化
+    const emulator = new V86Starter({
+      wasm_path: "./v86.wasm",
+      bios: { url: "./seabios.bin" },
+      vga_bios: { url: "./vgabios.bin" },
+      // A: FreeDOS ブートイメージ（CONFIG.SYS 編集済み）
+      fda: { url: "./images/freedos722.img" },
+      // B: Impulse Tracker 一式
+      fdb: { url: "./images/it.img" },
+      autostart: true,
+      screen_container: document.getElementById("screen"),
+      screen_adapter: "canvas",
+      memory_size: 64 * 1024 * 1024,  // 64 MB RAM
+      autolock: true
+    });
+
+    // エミュレータ起動完了イベント
+    emulator.add_listener("emulator-ready", () => {
+      console.log("FreeDOS + Impulse Tracker environment ready!");
+    });
+  </script>
+</body>
+</html>
